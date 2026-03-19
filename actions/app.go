@@ -75,7 +75,7 @@ func App() *buffalo.App {
 		app.PUT("/tickets/update", TicketsUpdate)
 		app.DELETE("/tickets/destroy", TicketsDestroy)
 		app.POST("/comments/create", CommentsCreate)
-		app.GET("/admin/dashboard", AdminDashboard)
+		app.GET("/admin", AdminDashboard)
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	})
 

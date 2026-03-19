@@ -39,7 +39,7 @@ func CommentsCreate(c buffalo.Context) error {
 		c.Set("errors", verrs)
 		c.Set("ticket", ticket)
 		c.Set("comment", comment)
-		return c.Render(http.StatusUnprocessableEntity, r.HTML("comments/show.plush.html"))
+		return c.Render(http.StatusUnprocessableEntity, r.HTML("tickets/show.plush.html"))
 	}
 
 	c.Flash().Add("success", "Comment created successfully.")

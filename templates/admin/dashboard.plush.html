@@ -1,1 +1,185 @@
-<h1>Admin#Dashboard</h1>
+<%= contentFor("title") { %>
+    Admin Dashboard
+  <% } %>
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="mb-1">Admin Dashboard</h1>
+      <p class="text-muted mb-0">Overview of ticket activity and current support workload.</p>
+    </div>
+  
+    <div>
+      <a href="/tickets" class="btn btn-outline-secondary">Back to Tickets</a>
+    </div>
+  </div>
+  
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Total Tickets</p>
+          <h2 class="mb-0"><%= totalTickets %></h2>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Open Tickets</p>
+          <h2 class="mb-0"><%= openTickets %></h2>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">High Priority</p>
+          <h2 class="mb-0"><%= highPriorityTickets %></h2>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-3">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <p class="text-muted mb-2">Unassigned</p>
+          <h2 class="mb-0"><%= unassignedTickets %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Recent Tickets</h2>
+        <a href="/tickets" class="btn btn-sm btn-primary">View All</a>
+      </div>
+  
+      <% if (len(allTickets) == 0) { %>
+        <p class="text-muted mb-0">No tickets available yet.</p>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Author</th>
+                <th>Created At</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for (ticket) in allTickets { %>
+                <tr>
+                  <td>
+                    <div class="fw-semibold">
+                      <a href="/tickets/<%= ticket.ID %>" class="text-decoration-none">
+                        <%= ticket.Title %>
+                      </a>
+                    </div>
+                    <div class="text-muted small"><%= ticket.Category %></div>
+                  </td>
+  
+                  <td>
+                    <% if (ticket.Status == "open") { %>
+                      <span class="badge bg-primary">Open</span>
+                    <% } else if (ticket.Status == "in_progress") { %>
+                      <span class="badge bg-warning text-dark">In Progress</span>
+                    <% } else if (ticket.Status == "resolved") { %>
+                      <span class="badge bg-success">Resolved</span>
+                    <% } else { %>
+                      <span class="badge bg-secondary">Closed</span>
+                    <% } %>
+                  </td>
+  
+                  <td>
+                    <% if (ticket.Priority == "high") { %>
+                      <span class="badge bg-danger">High</span>
+                    <% } else if (ticket.Priority == "medium") { %>
+                      <span class="badge bg-warning text-dark">Medium</span>
+                    <% } else { %>
+                      <span class="badge bg-info text-dark">Low</span>
+                    <% } %>
+                  </td>
+  
+                  <td>
+                    <% if (ticket.User.ID) { %>
+                      <%= ticket.User.Email %>
+                    <% } else { %>
+                      <span class="text-muted">Unknown user</span>
+                    <% } %>
+                  </td>
+  
+                  <td><%= ticket.CreatedAt.Format("2006-01-02 15:04") %></td>
+  
+                  <td class="text-end">
+                    <a href="/tickets/<%= ticket.ID %>" class="btn btn-sm btn-outline-primary">View</a>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h4 mb-3">Open Tickets</h2>
+  
+          <% if (len(openTickets) == 0) { %>
+            <p class="text-muted mb-0">No open tickets.</p>
+          <% } else { %>
+            <div class="list-group list-group-flush">
+              <%= for (ticket) in openTickets { %>
+                <a href="/tickets/<%= ticket.ID %>" class="list-group-item list-group-item-action px-0">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div class="fw-semibold"><%= ticket.Title %></div>
+                      <small class="text-muted"><%= ticket.Category %></small>
+                    </div>
+                    <span class="badge bg-primary">Open</span>
+                  </div>
+                </a>
+              <% } %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h4 mb-3">High Priority Tickets</h2>
+  
+          <% if (len(highPriorityTickets) == 0) { %>
+            <p class="text-muted mb-0">No high priority tickets.</p>
+          <% } else { %>
+            <div class="list-group list-group-flush">
+              <%= for (ticket) in highPriorityTickets { %>
+                <a href="/tickets/<%= ticket.ID %>" class="list-group-item list-group-item-action px-0">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div class="fw-semibold"><%= ticket.Title %></div>
+                      <small class="text-muted"><%= ticket.Status %></small>
+                    </div>
+                    <span class="badge bg-danger">High</span>
+                  </div>
+                </a>
+              <% } %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
