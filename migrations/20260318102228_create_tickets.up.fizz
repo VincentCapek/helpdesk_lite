@@ -1,0 +1,15 @@
+create_table("tickets") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("title", "string", {})
+	t.Column("description", "text", {})
+	t.Column("status", "string", {})
+	t.Column("priority", "string", {})
+	t.Column("category", "string", {})
+	t.Column("user_id", "uuid", {})
+	t.Column("agent_id", "uuid", {})
+	t.Timestamps()
+}
+
+add_index("tickets", "status", {})
+add_index("tickets", "priority", {})
+add_index("tickets", "user_id", {})
