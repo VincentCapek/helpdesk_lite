@@ -35,6 +35,7 @@ func TicketsShow(c buffalo.Context) error {
 	comment := &models.Comment{}
 	c.Set("ticket", ticket)
 	c.Set("comment", comment)
+	c.Set("commentErrors", nil)
 	return c.Render(http.StatusOK, r.HTML("tickets/show.plush.html"))
 }
 
@@ -69,8 +70,13 @@ func TicketsCreate(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		c.Set("errors", verrs)
+		c.Set("ticket", ticket)
+		c.Set("ticketErrors", verrs)
 		return c.Render(http.StatusUnprocessableEntity, r.HTML("tickets/new.plush.html"))
+	}
+
+	if err := tx.Create(ticket); err != nil {
+		return errors.WithStack(err)
 	}
 
 	c.Flash().Add("success", "Ticket created successfully.")

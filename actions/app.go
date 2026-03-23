@@ -67,14 +67,17 @@ func App() *buffalo.App {
 
 		app.GET("/", HomeHandler)
 
-		app.GET("/tickets/index", TicketsIndex)
-		app.GET("/tickets/show", TicketsShow)
+		app.GET("/tickets", TicketsIndex)
 		app.GET("/tickets/new", TicketsNew)
-		app.GET("/tickets/edit", TicketsEdit)
-		app.POST("/tickets/create", TicketsCreate)
-		app.PUT("/tickets/update", TicketsUpdate)
-		app.DELETE("/tickets/destroy", TicketsDestroy)
-		app.POST("/comments/create", CommentsCreate)
+		app.POST("/tickets", TicketsCreate)
+		
+		app.GET("/tickets/{ticket_id}", TicketsShow)
+		app.GET("/tickets/{ticket_id}/edit", TicketsEdit)
+		app.PUT("/tickets/{ticket_id}", TicketsUpdate)
+		app.DELETE("/tickets/{ticket_id}", TicketsDestroy)
+		
+		app.POST("/tickets/{ticket_id}/comments", CommentsCreate)
+		
 		app.GET("/admin", AdminDashboard)
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	})

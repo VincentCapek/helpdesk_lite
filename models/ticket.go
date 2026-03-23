@@ -16,6 +16,7 @@ const (
 	PriorityLow TicketPriority = "low"
 	PriorityMedium TicketPriority = "medium"
 	PriorityHigh TicketPriority = "high"
+	PriorityUrgent TicketPriority = "urgent"
 )
 
 // Ticket is used by pop to map your tickets database table to your go code.
@@ -65,7 +66,7 @@ func (t *Ticket) Validate(tx *pop.Connection) (*validate.Errors, error) {
 		&validators.StringInclusion{
 			Field: t.Priority,
 			Name: "Priority",
-			List: []string{string(PriorityLow), string(PriorityMedium), string(PriorityHigh)},
+			List: []string{string(PriorityLow), string(PriorityMedium), string(PriorityHigh), string(PriorityUrgent)},
 			Message: "Priority must be one of: low, medium, high",
 		},
 		&validators.StringInclusion{

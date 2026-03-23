@@ -84,11 +84,11 @@
       <div class="card-body">
         <h2 class="h4 mb-3">Add a Comment</h2>
   
-        <% if (errors) { %>
+        <%= if (commentErrors && commentErrors.HasAny()) { %>
           <div class="alert alert-danger">
-            <p class="mb-2"><strong>Please fix the following errors:</strong></p>
+            <p class="mb-2"><strong>Please fix the following errors</strong></p>
             <ul class="mb-0">
-              <%= for (k, v) in errors.Errors { %>
+              <%= for (k, v) in commentErrors.Errors { %>
                 <%= for (msg) in v { %>
                   <li><%= k %>: <%= msg %></li>
                 <% } %>

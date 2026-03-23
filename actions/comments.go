@@ -36,10 +36,14 @@ func CommentsCreate(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		c.Set("errors", verrs)
+		c.Set("commentErrors", verrs)
 		c.Set("ticket", ticket)
 		c.Set("comment", comment)
 		return c.Render(http.StatusUnprocessableEntity, r.HTML("tickets/show.plush.html"))
+	}
+
+	if err := tx.Create(comment); err != nil {
+		return errors.WithStack(err)
 	}
 
 	c.Flash().Add("success", "Comment created successfully.")

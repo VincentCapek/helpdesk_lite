@@ -1,102 +1,99 @@
 <%= contentFor("title") { %>
-    Tickets
-  <% } %>
-  
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h1 class="mb-1">Tickets</h1>
-      <p class="text-muted mb-0">Browse and manage support tickets.</p>
-    </div>
-  
-    <div>
-      <a href="/tickets/new" class="btn btn-primary">New Ticket</a>
-    </div>
+  Tickets
+<% } %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-1">Tickets</h1>
+    <p class="text-muted mb-0">Browse and manage support tickets.</p>
   </div>
-  
-  <div class="card">
-    <div class="card-body">
-      <% if (len(tickets) == 0) { %>
-        <div class="text-center py-5">
-          <h2 class="h5 mb-2">No tickets yet</h2>
-          <p class="text-muted mb-3">Create your first support ticket to get started.</p>
-          <a href="/tickets/new" class="btn btn-success">Create a Ticket</a>
-        </div>
-      <% } else { %>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead>
+
+  <div>
+    <a href="/tickets/new" class="btn btn-primary">New Ticket</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= if (len(tickets) == 0) { %>
+      <div class="text-center py-5">
+        <h2 class="h5 mb-2">No tickets yet</h2>
+        <p class="text-muted mb-3">Create your first support ticket to get started.</p>
+        <a href="/tickets/new" class="btn btn-success">Create a Ticket</a>
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Category</th>
+              <th>Author</th>
+              <th>Created At</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for (ticket) in tickets { %>
               <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Priority</th>
-                <th>Category</th>
-                <th>Author</th>
-                <th>Created At</th>
-                <th class="text-end">Actions</th>
+                <td>
+                  <div class="fw-semibold">
+                    <a href="/tickets/<%= ticket.ID %>" class="text-decoration-none">
+                      <%= ticket.Title %>
+                    </a>
+                  </div>
+                  <div class="text-muted small">
+                    <%= ticket.Description %>
+                  </div>
+                </td>
+
+                <td>
+                  <%= if (ticket.Status == "open") { %>
+                    <span class="badge bg-primary">Open</span>
+                  <% } else if (ticket.Status == "in_progress") { %>
+                    <span class="badge bg-warning text-dark">In Progress</span>
+                  <% } else if (ticket.Status == "resolved") { %>
+                    <span class="badge bg-success">Resolved</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary">Closed</span>
+                  <% } %>
+                </td>
+
+                <td>
+                  <%= if (ticket.Priority == "high") { %>
+                    <span class="badge bg-danger">High</span>
+                  <% } else if (ticket.Priority == "medium") { %>
+                    <span class="badge bg-warning text-dark">Medium</span>
+                  <% } else { %>
+                    <span class="badge bg-info text-dark">Low</span>
+                  <% } %>
+                </td>
+
+                <td><%= ticket.Category %></td>
+
+                <td>
+                  <%= if (ticket.User.ID) { %>
+                    <%= ticket.User.Email %>
+                  <% } else { %>
+                    <span class="text-muted">Unknown user</span>
+                  <% } %>
+                </td>
+
+                <td><%= ticket.CreatedAt.Format("2006-01-02 15:04") %></td>
+
+                <td class="text-end">
+                  <div class="d-inline-flex gap-2">
+                    <a href="/tickets/<%= ticket.ID %>" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="/tickets/<%= ticket.ID %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <%= for (ticket) in tickets { %>
-                <tr>
-                  <td>
-                    <div class="fw-semibold">
-                      <a href="/tickets/<%= ticket.ID %>" class="text-decoration-none">
-                        <%= ticket.Title %>
-                      </a>
-                    </div>
-                    <div class="text-muted small">
-                      <%= ticket.Description %>
-                    </div>
-                  </td>
-  
-                  <td>
-                    <% if (ticket.Status == "open") { %>
-                      <span class="badge bg-primary">Open</span>
-                    <% } else if (ticket.Status == "in_progress") { %>
-                      <span class="badge bg-warning text-dark">In Progress</span>
-                    <% } else if (ticket.Status == "resolved") { %>
-                      <span class="badge bg-success">Resolved</span>
-                    <% } else { %>
-                      <span class="badge bg-secondary">Closed</span>
-                    <% } %>
-                  </td>
-  
-                  <td>
-                    <% if (ticket.Priority == "high") { %>
-                      <span class="badge bg-danger">High</span>
-                    <% } else if (ticket.Priority == "medium") { %>
-                      <span class="badge bg-warning text-dark">Medium</span>
-                    <% } else { %>
-                      <span class="badge bg-info text-dark">Low</span>
-                    <% } %>
-                  </td>
-  
-                  <td><%= ticket.Category %></td>
-  
-                  <td>
-                    <% if (ticket.User.ID) { %>
-                      <%= ticket.User.Email %>
-                    <% } else { %>
-                      <span class="text-muted">Unknown user</span>
-                    <% } %>
-                  </td>
-  
-                  <td>
-                    <%= ticket.CreatedAt.Format("2006-01-02 15:04") %>
-                  </td>
-  
-                  <td class="text-end">
-                    <div class="d-inline-flex gap-2">
-                      <a href="/tickets/<%= ticket.ID %>" class="btn btn-sm btn-outline-primary">View</a>
-                      <a href="/tickets/<%= ticket.ID %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
-                    </div>
-                  </td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      <% } %>
-    </div>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
   </div>
-  
+</div>

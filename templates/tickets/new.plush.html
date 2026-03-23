@@ -15,11 +15,11 @@
   
   <div class="card">
     <div class="card-body">
-      <% if (errors) { %>
+      <%= if (ticketErrors && ticketErrors.HasAny()) { %>
         <div class="alert alert-danger">
           <p class="mb-2"><strong>Please fix the following errors:</strong></p>
           <ul class="mb-0">
-            <%= for (k, v) in errors.Errors { %>
+            <%= for (k, v) in ticketErrors.Errors { %>
               <%= for (msg) in v { %>
                 <li><%= k %>: <%= msg %></li>
               <% } %>

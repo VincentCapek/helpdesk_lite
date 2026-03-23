@@ -39,9 +39,6 @@ func AdminDashboard(c buffalo.Context) error {
 	c.Set("unassignedTickets", unassignedTickets)
 
 	c.Set("totalTickets", len(allTickets))
-	c.Set("openTickets", len(openTickets))
-	c.Set("highPriorityTickets", len(highPriorityTickets))
-	c.Set("unassignedTickets", len(unassignedTickets))
 
 	return c.Render(http.StatusOK, r.HTML("admin/dashboard.plush.html"))
 }
