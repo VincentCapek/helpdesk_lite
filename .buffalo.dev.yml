@@ -19,7 +19,7 @@ build_target_path: "./cmd/app"
 binary_name: helpdesk-lite-build
 build_flags:
 - "-tags"
-- "sqlite3"
+- "sqlite"
 command_flags: []
 enable_colors: true
 log_name: buffalo
